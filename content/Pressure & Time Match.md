@@ -13,11 +13,13 @@ They are used as multiplication factors to calculate results from Specialized an
 ## Equations
 
 For single phase oil or water, the pressure match is given by
+
 $$
 PM = \frac{2\pi kh}{q_{ref}B\mu}
 $$
 
 The time match is given by
+
 $$
 TM = \frac{3600*k}{\phi\mu c_t r_w^2}
 $$

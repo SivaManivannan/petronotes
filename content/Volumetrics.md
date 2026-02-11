@@ -24,10 +24,14 @@ aliases:
 
 ## Equations
 
-$$ PV = A \times h \times \phi$$
+$$
+ PV = A \times h \times \phi
+$$
 where $A$ is the reservoir area
 
-$$ STOIIP = \frac {PV \times S_{oi}} {B_{oi}}$$
+$$
+ STOIIP = \frac {PV \times S_{oi}} {B_{oi}}
+$$
 where $S_{oi} , B_{oi}$ are oil saturation and volume factor at initial reservoir conditions before production started.
 
 For gas, replace $S_{oi} , B_{oi}$ with $S_{gi} , B_{gi}$ respectively.

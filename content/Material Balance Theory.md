@@ -23,13 +23,18 @@ After a pressure drop in the reservoir, oil volume factor changes from its initi
 
 $NR_{si}$ is the scf of gas initially dissolved in oil. As a result of the pressure drop in the reservoir, the reservoir oil can only dissolve $R_s \:(< R_{si})$. 
 
-Total oil expansion is given by: $$NE_o = N [B_o - B_{oi}+(R_{si}-R_s)B_g]$$
+Total oil expansion is given by:
+
+$$
+NE_o = N [B_o - B_{oi}+(R_{si}-R_s)B_g]
+$$
  When pressure drops below the bubble point $(B_o - B_{oi})$ becomes negative but it is more than compensated by term: $(R_{si}-R_s)B_g$. 
 
 ### Gas cap expansion
 
 As there is no dissolved oil in Gas cap, the gas cap expansion is simply $G(B_g-B_{gi})$. This expansion can be expressed using other terms as:
-$$G(B_g-B_{gi}) = mN\frac{B_{oi}}{B_{gi}} (B_g - B_{gi}) = mN\frac{B_{oi}}{B_{gi}} E_g
+$$
+G(B_g-B_{gi}) = mN\frac{B_{oi}}{B_{gi}} (B_g - B_{gi}) = mN\frac{B_{oi}}{B_{gi}} E_g
 $$
 
 
@@ -37,23 +42,39 @@ $$
 
 ### Water Influx from Aquifer
 
-Using a pot aquifer model, the volume of water crossing into oil zone can be expressed as: $$W_e = Wc\Delta P $$
+Using a pot aquifer model, the volume of water crossing into oil zone can be expressed as:
+
+$$
+W_e = Wc\Delta P 
+$$
 Water expansion from the aquifer into the reservoir is $W_eB_w$
 
 ### Connate water expansion & water compression
 
 Pore volume available for hydrocarbon is given by 
-$$V_h = V_t N_G \phi (1-S_{wi}) = V_t N_G \phi - V_w$$
-$$ \frac{\partial V_h}{\partial P} = V_t N_G \frac{\partial \phi}{\partial P} - \frac{\partial V_w}{\partial P}$$
+$$
+V_h = V_t N_G \phi (1-S_{wi}) = V_t N_G \phi - V_w
+$$
+$$
+ \frac{\partial V_h}{\partial P} = V_t N_G \frac{\partial \phi}{\partial P} - \frac{\partial V_w}{\partial P}
+$$
 
 Compressibility terms are given by 
-$$ c_w = -\frac{1}{V_w} \frac{\partial V_w}{\partial P} \quad and \quad c_{\phi} = \frac{1}{\phi} \frac{\partial \phi}{\partial P}$$
+$$
+ c_w = -\frac{1}{V_w} \frac{\partial V_w}{\partial P} \quad and \quad c_{\phi} = \frac{1}{\phi} \frac{\partial \phi}{\partial P}
+$$
 
-Combining the two yields $$\frac{\partial V_h}{\partial P} = V_t N_G C_\phi \phi + V_w c_w = \frac{V_h}{1-S_{wi}}(c_{\phi} \:+c_wS_{wi})$$
+Combining the two yields
+
+$$
+\frac{\partial V_h}{\partial P} = V_t N_G C_\phi \phi + V_w c_w = \frac{V_h}{1-S_{wi}}(c_{\phi} \:+c_wS_{wi})
+$$
 >[!tip] $\frac{\partial V_h}{\partial P}$ is positive because the compression of rock is adding to production
 
 Note that initial hydrocarbon volume was $V_h = NB_{oi}\:+GB_{gi}\:=(1+m)NB_{oi}$. Combining the two equations, we get,
-$$\Delta V_h = (1+m)NB_{oi}\Big[\frac{c_{\phi} \:+c_wS_{wi}}{1-S_{wi}}\Big]\Delta P$$
+$$
+\Delta V_h = (1+m)NB_{oi}\Big[\frac{c_{\phi} \:+c_wS_{wi}}{1-S_{wi}}\Big]\Delta P
+$$
 
 
 ## Nomenclature

@@ -35,7 +35,7 @@ function parseFrontmatter(content: string): { frontmatter: any; content: string 
     const contentStr = match[2]
 
     const frontmatter: any = {}
-    const lines = frontmatterStr.split('\n')
+    const lines = frontmatterStr.split("\n")
     let currentKey: string | null = null
     let currentList: string[] | null = null
 
@@ -46,7 +46,7 @@ function parseFrontmatter(content: string): { frontmatter: any; content: string 
         if (!currentList) {
           currentList = []
         }
-        currentList.push(listItemMatch[1].trim().replace(/['"]$/g, '').replace(/^['"]/, ''))
+        currentList.push(listItemMatch[1].trim().replace(/['"]$/g, "").replace(/^['"]/, ""))
         continue
       }
 
@@ -56,28 +56,33 @@ function parseFrontmatter(content: string): { frontmatter: any; content: string 
         currentList = null
       }
 
-      if (line.includes(':')) {
-        const colonIndex = line.indexOf(':')
+      if (line.includes(":")) {
+        const colonIndex = line.indexOf(":")
         const key = line.slice(0, colonIndex).trim()
         let value = line.slice(colonIndex + 1).trim()
 
         currentKey = key
 
-        if (value === '' || value === null) {
+        if (value === "" || value === null) {
           // Value may follow as a YAML list
           continue
         }
 
         // Handle inline arrays [a, b, c]
-        if (value.startsWith('[') && value.endsWith(']')) {
-          frontmatter[key] = value.slice(1, -1).split(',').map(v => v.trim().replace(/['"]$/g, '').replace(/^['"]/, ''))
+        if (value.startsWith("[") && value.endsWith("]")) {
+          frontmatter[key] = value
+            .slice(1, -1)
+            .split(",")
+            .map((v) => v.trim().replace(/['"]$/g, "").replace(/^['"]/, ""))
           currentKey = null
           continue
         }
 
         // Remove quotes if present
-        if ((value.startsWith('"') && value.endsWith('"')) ||
-            (value.startsWith("'") && value.endsWith("'"))) {
+        if (
+          (value.startsWith('"') && value.endsWith('"')) ||
+          (value.startsWith("'") && value.endsWith("'"))
+        ) {
           value = value.slice(1, -1)
         }
 
@@ -112,16 +117,16 @@ function getAllFiles(contentPath: string): FileInfo[] {
 
           if (stat.isDirectory()) {
             // Skip hidden directories, node_modules, and templates
-            if (!item.startsWith('.') && item !== 'node_modules' && item !== 'templates') {
+            if (!item.startsWith(".") && item !== "node_modules" && item !== "templates") {
               walkDirectory(fullPath)
             }
-          } else if (item.endsWith('.md')) {
+          } else if (item.endsWith(".md")) {
             try {
-              const content = readFileSync(fullPath, 'utf-8')
+              const content = readFileSync(fullPath, "utf-8")
               const { frontmatter } = parseFrontmatter(content)
 
               // Extract slug from filename
-              const slug = item.replace('.md', '')
+              const slug = item.replace(".md", "")
 
               files.push({
                 filePath: fullPath,
@@ -129,9 +134,11 @@ function getAllFiles(contentPath: string): FileInfo[] {
                 frontmatter: {
                   ...frontmatter,
                   tags: frontmatter.tags
-                    ? (Array.isArray(frontmatter.tags) ? frontmatter.tags : [frontmatter.tags])
-                    : []
-                }
+                    ? Array.isArray(frontmatter.tags)
+                      ? frontmatter.tags
+                      : [frontmatter.tags]
+                    : [],
+                },
               })
             } catch (error) {
               console.error(`Error reading file ${fullPath}:`, error)
@@ -146,7 +153,7 @@ function getAllFiles(contentPath: string): FileInfo[] {
     walkDirectory(contentPath)
     return files
   } catch (error) {
-    console.error('Error getting files:', error)
+    console.error("Error getting files:", error)
     return []
   }
 }
@@ -159,7 +166,7 @@ function evaluateChoice(expr: string, file: FileInfo): string {
   const m = expr.trim().match(choiceRegex)
   if (!m) {
     // It's a plain string literal like "Others"
-    return expr.trim().replace(/^"/, '').replace(/"$/, '')
+    return expr.trim().replace(/^"/, "").replace(/"$/, "")
   }
 
   const [, field, value, trueResult, falseExpr] = m
@@ -176,7 +183,7 @@ function evaluateChoice(expr: string, file: FileInfo): string {
 
 function parseDataviewQuery(query: string, files: FileInfo[]) {
   // Rejoin multi-line query into a single string for GROUP BY parsing
-  const rawLines = query.trim().split('\n')
+  const rawLines = query.trim().split("\n")
   const lines: string[] = []
   let accumulator = ""
 
@@ -224,9 +231,8 @@ function parseDataviewQuery(query: string, files: FileInfo[]) {
   // Filter files based on FROM path
   let filteredFiles = files
   if (fromPath && fromPath !== "" && fromPath !== '"') {
-    filteredFiles = files.filter(file =>
-      file.filePath?.includes(fromPath) ||
-      file.slug?.includes(fromPath)
+    filteredFiles = files.filter(
+      (file) => file.filePath?.includes(fromPath) || file.slug?.includes(fromPath),
     )
   }
 
@@ -251,9 +257,7 @@ function parseDataviewQuery(query: string, files: FileInfo[]) {
   if (groupByExpr) {
     const groups: { [key: string]: FileInfo[] } = {}
     for (const file of filteredFiles) {
-      const groupKey = groupByExpr.includes("choice")
-        ? evaluateChoice(groupByExpr, file)
-        : "Others"
+      const groupKey = groupByExpr.includes("choice") ? evaluateChoice(groupByExpr, file) : "Others"
 
       if (!groups[groupKey]) {
         groups[groupKey] = []
@@ -273,19 +277,19 @@ function buildMdastNodes(result: ReturnType<typeof parseDataviewQuery>): any[] {
 
   function makeWikilinkListItem(fileName: string): any {
     return {
-      type: 'listItem',
+      type: "listItem",
       spread: false,
       children: [
         {
-          type: 'paragraph',
+          type: "paragraph",
           children: [
             {
-              type: 'link',
+              type: "link",
               url: fileName,
-              children: [{ type: 'text', value: fileName }],
+              children: [{ type: "text", value: fileName }],
               data: {
                 hProperties: {
-                  className: ['internal'],
+                  className: ["internal"],
                 },
               },
             },
@@ -309,9 +313,9 @@ function buildMdastNodes(result: ReturnType<typeof parseDataviewQuery>): any[] {
 
       // Heading node
       nodes.push({
-        type: 'heading',
+        type: "heading",
         depth: 2,
-        children: [{ type: 'text', value: groupName }],
+        children: [{ type: "text", value: groupName }],
       })
 
       // List node with items
@@ -321,7 +325,7 @@ function buildMdastNodes(result: ReturnType<typeof parseDataviewQuery>): any[] {
       })
 
       nodes.push({
-        type: 'list',
+        type: "list",
         ordered: false,
         spread: false,
         children: listItems,
@@ -334,7 +338,7 @@ function buildMdastNodes(result: ReturnType<typeof parseDataviewQuery>): any[] {
     })
 
     nodes.push({
-      type: 'list',
+      type: "list",
       ordered: false,
       spread: false,
       children: listItems,
@@ -344,7 +348,9 @@ function buildMdastNodes(result: ReturnType<typeof parseDataviewQuery>): any[] {
   return nodes
 }
 
-export const Dataview: QuartzTransformerPlugin<DataviewOptions> = (userOpts: DataviewOptions = defaultOptions) => {
+export const Dataview: QuartzTransformerPlugin<DataviewOptions> = (
+  userOpts: DataviewOptions = defaultOptions,
+) => {
   const opts = { ...defaultOptions, ...userOpts }
 
   return {
@@ -355,8 +361,8 @@ export const Dataview: QuartzTransformerPlugin<DataviewOptions> = (userOpts: Dat
       if (opts.enableDataview) {
         plugins.push(() => {
           return (tree: Root) => {
-            visit(tree, 'code', (node: Code, index: number | undefined, parent: any) => {
-              if (node.lang === 'dataview' && node.value) {
+            visit(tree, "code", (node: Code, index: number | undefined, parent: any) => {
+              if (node.lang === "dataview" && node.value) {
                 try {
                   // Get all files for context
                   const allFiles = getAllFiles(opts.contentPath || "content")
@@ -364,11 +370,11 @@ export const Dataview: QuartzTransformerPlugin<DataviewOptions> = (userOpts: Dat
                   const newNodes = buildMdastNodes(result)
 
                   // Replace the dataview code block with the generated AST nodes
-                  if (parent && typeof index === 'number' && newNodes.length > 0) {
+                  if (parent && typeof index === "number" && newNodes.length > 0) {
                     parent.children.splice(index, 1, ...newNodes)
                   }
                 } catch (error) {
-                  console.error('Error processing dataview query:', error)
+                  console.error("Error processing dataview query:", error)
                 }
               }
             })

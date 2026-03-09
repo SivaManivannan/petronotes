@@ -4,11 +4,10 @@ aliases:
   - RTA
 ---
 
-[[Diagnostic]]
-
 ```dataview
 LIST rows.file.link
-FROM ""
+FROM "RTA"
+WHERE !contains(tags, "Category")
 SORT file.name ASC
 GROUP BY choice(contains(tags, "Analysis"), "Analysis",
         choice(contains(tags, "Concept"), "Concepts",
@@ -16,3 +15,6 @@ GROUP BY choice(contains(tags, "Analysis"), "Analysis",
         "Others")))
 
 ```
+
+- Categories:
+  - [[Diagnostic]]

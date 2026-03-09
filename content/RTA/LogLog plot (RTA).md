@@ -17,6 +17,4 @@ When y-axis is changed to [[Rate or Pressure normalizations|Rate normalized pres
 1. $kh$ value obtained from the position of the IARF line
 2. $k$ calulated using pay zone thickness from [[Test parameters]]
 
-
 ![[Chow Group]]
-

@@ -1,4 +1,4 @@
 ---
 tags: Analysis
-aliases: 
+aliases:
 ---

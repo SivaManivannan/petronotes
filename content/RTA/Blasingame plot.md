@@ -15,7 +15,6 @@ Hence, when the pseudo-steady state dominates $q_o/\Delta p$ vs $\bar{t}$ will s
 
 In addition to normalized rate, two additional channels are also plotted to facilitate the diagnostic.
 
-
 ![[Rate or Pressure normalizations#Pressure Normalized Rate]]
 
 ## Derivation

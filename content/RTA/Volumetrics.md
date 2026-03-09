@@ -9,29 +9,27 @@ aliases:
   - STGIP
 ---
 
-
 ## Definitions
 
 - **PV**, Pore Volume is the total volume of the pore spaces in the reservoir containing hydrocarbons and water
 - **STOIIP/STGIIP**, Stock Tank Oil (Gas) **Initially** In Place is the volume of the oil (gas) in the reservoir before production started but converted to surface conditions
--  **STOIP/STGIP**, Stock Tank Oil (Gas) In Place is the volume of oil (gas) currently present in the reservoir converted to surface conditions
-		*STOIP/STGIP (t) = STOIIP/STGIIP - Cumulative production (t)*
+- **STOIP/STGIP**, Stock Tank Oil (Gas) In Place is the volume of oil (gas) currently present in the reservoir converted to surface conditions
+  _STOIP/STGIP (t) = STOIIP/STGIIP - Cumulative production (t)_
 
-
->[!warning] Reserves, the amount of oil/gas that could be potentially extracted, is different and always less than STOIIP/STGIIP
-> 
-
+> [!warning] Reserves, the amount of oil/gas that could be potentially extracted, is different and always less than STOIIP/STGIIP
 
 ## Equations
 
 $$
  PV = A \times h \times \phi
 $$
+
 where $A$ is the reservoir area
 
 $$
  STOIIP = \frac {PV \times S_{oi}} {B_{oi}}
 $$
+
 where $S_{oi} , B_{oi}$ are oil saturation and volume factor at initial reservoir conditions before production started.
 
 For gas, replace $S_{oi} , B_{oi}$ with $S_{gi} , B_{gi}$ respectively.
@@ -52,4 +50,5 @@ For gas, replace $S_{oi} , B_{oi}$ with $S_{gi} , B_{gi}$ respectively.
 | $N_G$     | Net-to-Gross                                            |
 | $W_p$     | Volume of water produced at the surface                 |
 | $W_{inj}$ | Volume of water injected                                |
+
 All the volumes above are measured at surface conditions

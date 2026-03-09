@@ -181,6 +181,26 @@ function evaluateChoice(expr: string, file: FileInfo): string {
   return evaluateChoice(falseExpr.trim(), file)
 }
 
+function evaluateWhereCondition(condition: string, file: FileInfo): boolean {
+  const notContainsMatch = condition.match(/!contains\((\w+),\s*"([^"]+)"\)/)
+  if (notContainsMatch) {
+    const [, field, value] = notContainsMatch
+    const fieldValue = file.frontmatter?.[field] || []
+    const items = Array.isArray(fieldValue) ? fieldValue : [fieldValue]
+    return !items.includes(value)
+  }
+
+  const containsMatch = condition.match(/contains\((\w+),\s*"([^"]+)"\)/)
+  if (containsMatch) {
+    const [, field, value] = containsMatch
+    const fieldValue = file.frontmatter?.[field] || []
+    const items = Array.isArray(fieldValue) ? fieldValue : [fieldValue]
+    return items.includes(value)
+  }
+
+  return true
+}
+
 function parseDataviewQuery(query: string, files: FileInfo[]) {
   // Rejoin multi-line query into a single string for GROUP BY parsing
   const rawLines = query.trim().split("\n")
@@ -209,6 +229,7 @@ function parseDataviewQuery(query: string, files: FileInfo[]) {
   let fromPath = ""
   let sortBy: { field: string; direction: string } | null = null
   let groupByExpr: string | null = null
+  let whereCondition: string | null = null
   let queryType = "LIST"
 
   for (const line of lines) {
@@ -219,6 +240,8 @@ function parseDataviewQuery(query: string, files: FileInfo[]) {
       if (match) {
         sortBy = { field: match[1], direction: match[2]?.toUpperCase() || "ASC" }
       }
+    } else if (line.startsWith("WHERE")) {
+      whereCondition = line.replace("WHERE", "").trim()
     } else if (line.startsWith("GROUP BY")) {
       groupByExpr = line.replace("GROUP BY", "").trim()
     } else if (line.startsWith("LIST")) {
@@ -231,9 +254,22 @@ function parseDataviewQuery(query: string, files: FileInfo[]) {
   // Filter files based on FROM path
   let filteredFiles = files
   if (fromPath && fromPath !== "" && fromPath !== '"') {
-    filteredFiles = files.filter(
-      (file) => file.filePath?.includes(fromPath) || file.slug?.includes(fromPath),
-    )
+    const normalizedFromPath = fromPath.replace(/\\/g, "/")
+    filteredFiles = files.filter((file) => {
+      const normalizedFilePath = file.filePath?.replace(/\\/g, "/") || ""
+      // Match directory boundaries: ensure the path segment matches exactly
+      return (
+        normalizedFilePath.includes(`/${normalizedFromPath}/`) ||
+        normalizedFilePath.includes(`/${normalizedFromPath}\\`) ||
+        normalizedFilePath.endsWith(`/${normalizedFromPath}`) ||
+        normalizedFilePath.endsWith(`\\${normalizedFromPath}`)
+      )
+    })
+  }
+
+  // Apply WHERE clause filtering
+  if (whereCondition) {
+    filteredFiles = filteredFiles.filter((file) => evaluateWhereCondition(whereCondition, file))
   }
 
   // Sort files — handle dotted fields like file.name

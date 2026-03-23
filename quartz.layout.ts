@@ -43,15 +43,16 @@ export const defaultContentPageLayout: PageLayout = {
     Component.Graph({
       localGraph: {
         depth: 2,
-        linkDistance: 40,
-        repelForce: 0.7,
+        linkDistance: 10,
+        repelForce: 0.5,
+        centerForce: 0.5,
         fontSize: 0.6,
         focusOnHover: true,
-        removeTags: ["Category"],
+        showTags: false,
       },
       globalGraph: {
-        removeTags: ["Category"],
         focusOnHover: true,
+        showTags: false,
       },
     }),
     Component.DesktopOnly(Component.TableOfContents()),

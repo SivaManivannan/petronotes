@@ -1,5 +1,5 @@
 ---
-title: "Petro notes"
+title: Petro notes
 ---
 
 Welcome to Petro notes collection.

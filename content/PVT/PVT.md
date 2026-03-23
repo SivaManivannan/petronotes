@@ -17,3 +17,4 @@ GROUP BY choice(contains(tags, "OilGas"), "Oil-Gas",
 ```
 - Categories
 	- [[Oil-Gas Phase Behavior]]
+	- [[Oil-Gas Properties]]
